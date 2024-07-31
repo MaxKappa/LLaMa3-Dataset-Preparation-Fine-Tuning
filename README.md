@@ -1,9 +1,9 @@
 
-# Log Processor and CSV Converter
+# LLaMa3-Dataset-Preparation-Fine-Tuning
 
 ## Descrizione
 
-Questo progetto consiste in una serie di script Python che lavorano insieme per processare file di log, convertire file CSV e filtrare dati. Utilizza `pymongo` per interagire con un database MongoDB, `python-dotenv` per la gestione delle variabili di configurazione, e `pandas` per la manipolazione dei dati.
+Questo progetto in Python crea un dataset per il fine tuning di LLaMa3 per Malware Detection a partire da dei log di sistema estratti con Fibratus.
 
 ## Struttura del Progetto
 
@@ -35,13 +35,14 @@ pip install -r requirements.txt
 1. Clona il repository:
 
     ```sh
-    git clone https://github.com/tuo-username/log-processor-csv-converter.git
+    git clone https://github.com/MaxKappa/LLaMa3-Dataset-Preparation-Fine-Tuning
+.git
     ```
 
 2. Vai nella directory del progetto:
 
     ```sh
-    cd log-processor-csv-converter
+    cd LLaMa3-Dataset-Preparation-Fine-Tuning
     ```
 
 3. Crea un file `.env` nella directory principale del progetto e aggiungi le tue configurazioni MongoDB:
@@ -64,6 +65,4 @@ Esegui lo script principale `main.py` per avviare il processo:
 ```sh
 python main.py
 ```
-## Licenza
 
-Questo progetto è distribuito sotto la licenza MIT. Vedi il file `LICENSE` per maggiori dettagli.
