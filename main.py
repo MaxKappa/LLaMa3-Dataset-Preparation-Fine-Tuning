@@ -1,4 +1,8 @@
-import filter, os, mongo, json, csvconverter, argparse, logprocessor
+import os, json, argparse
+import src.filter as filter
+import src.mongo as mongo
+import src.csvconverter as csvconverter
+import src.logprocessor as logprocessor
 from config import load_config
 def main():
 

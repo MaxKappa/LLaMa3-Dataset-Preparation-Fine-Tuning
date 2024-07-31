@@ -41,6 +41,8 @@ class Mongo:
                 self.retrieve_and_save_data(coll, self.reg_pipeline(), os.path.join(path, 'reg.json'))
                 end = time.time()
                 print(f'Directory {hash_value} saved, count: {count}, duration: {end-start}s')
+                if count == 2:
+                    break
 
     def network_pipeline(self):
         return [{'$match': {'name': {'$regex': 'Send|Recv|Connect|Disconnect', '$options': 'i'}, 'kparams.dip': {'$ne': None}}}, {'$project': {'_id': 0, 'pid': '$pid', 'dest': '$kparams.dip', 'prot': '$kparams.l4_proto', 'cmd': '$ps.cmdline', 'op': '$name'}}]
