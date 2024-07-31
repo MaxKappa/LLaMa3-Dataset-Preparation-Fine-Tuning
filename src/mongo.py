@@ -41,7 +41,7 @@ class Mongo:
                 self.retrieve_and_save_data(coll, self.reg_pipeline(), os.path.join(path, 'reg.json'))
                 end = time.time()
                 print(f'Directory {hash_value} saved, count: {count}, duration: {end-start}s')
-                if count == 2:
+                if count == 4:
                     break
 
     def network_pipeline(self):

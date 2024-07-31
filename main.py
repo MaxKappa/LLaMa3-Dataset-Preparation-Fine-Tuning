@@ -15,6 +15,7 @@ def main():
     parser.add_argument('--dir_name', required=True, help='Name of output directory')
     parser.add_argument('--hash_filepath', required=False, default=False, action='store_true', help='Hash all filepath in logs')
     parser.add_argument('--skip', required=False, action='store_true', help='Skip database fetch')
+    parser.add_argument('--percentage', required=False, default=100, help='Split fine tuning data in 2 blocks of size equal to percentage')
     args = parser.parse_args()
 
     output_dir = args.path + args.dir_name  #/Users/massimiliano/Desktop/UNIMI/tesi/data/
@@ -35,7 +36,7 @@ def main():
     if args.csv == True:
         converter = csvconverter.CSVConverter(output_dir)
         converter.convert()
-    processor = logprocessor.LogProcessor(output_dir, 15000)
+    processor = logprocessor.LogProcessor(output_dir, 12000, args.clean)
     processor.process_files()
 
 if __name__ == "__main__":
