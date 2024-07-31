@@ -1,7 +1,7 @@
 import re, json, hashlib
 class Filter:
     def __init__(self, hash):
-        print("Starting data...")
+        print("Starting data filtering...")
         self.patterns = [
             r'.*fibratus.*',
             r'.*Fibratus.*',
@@ -10,7 +10,8 @@ class Filter:
             r'.*Edge.*',
             r'.*Update.*',
             r'.*WindowsStore.*',
-            r'.*Xbox.*'
+            r'.*Xbox.*',
+            r'.*Microsoft.*'
         ]
         self.compiled_patterns = [re.compile(pattern) for pattern in self.patterns]
         self.hash = hash
