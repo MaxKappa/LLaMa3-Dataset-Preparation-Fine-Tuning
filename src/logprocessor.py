@@ -1,18 +1,25 @@
 import os
+import random
 import pandas as pd
 import json
 
 class LogProcessor:
-    def __init__(self, dir, batch_chars, selector):
+    def __init__(self, dir, batch_chars, selector, percentage):
         self.dir = dir
+        self.training_file_path = os.path.join(self.dir, "training.jsonl")
+        self.test_file_path = os.path.join(self.dir, "test.jsonl")
         self.output_file_path = os.path.join(self.dir, "all_data.jsonl")
         self.batch_chars = batch_chars
         self.selector = selector
+        self.percentage = percentage
         self.count = 0
         print('Starting dataset creation...')
+        open(self.training_file_path, 'w').close()
         open(self.output_file_path, 'w').close()
+        open(self.test_file_path, 'w').close()
 
-
+    def percentage_count(self, total):
+        return int((self.percentage * total) / 100.0)
 
     def split_logs_to_batches(self, logs):
         """Split logs into batches based on character count."""
@@ -43,6 +50,7 @@ class LogProcessor:
                     file_path = os.path.join(subdir, file)
                     self.process_file(file_path)
 
+
     def process_file(self, file_path):
         """Process a single JSON file."""
         log_df = pd.read_json(file_path)
@@ -65,8 +73,27 @@ class LogProcessor:
             }
             for batch in batches
         ]
-
         with open(self.output_file_path, 'a') as jsonl_file:
             for entry in jsonl_data:
                 json.dump(entry, jsonl_file)
                 jsonl_file.write('\n')
+    
+    def split_jsonl_file(self):
+        with open(self.output_file_path, 'r') as file:
+            lines = file.readlines()
+        json_objects = [json.loads(line) for line in lines]
+        training_count = self.percentage_count(len(json_objects))
+        random.shuffle(json_objects)
+        
+        first_file_batches = json_objects[:training_count]
+        second_file_batches = json_objects[training_count:]
+        
+        with open(self.training_file_path, 'a') as file1:
+            json.dump(first_file_batches, file1)
+            file1.write('\n')
+        
+        with open(self.test_file_path, 'a') as file2:
+            json.dump(second_file_batches, file2)
+            file2.write('\n')
+        
+

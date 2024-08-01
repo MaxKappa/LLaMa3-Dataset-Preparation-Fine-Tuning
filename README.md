@@ -35,8 +35,7 @@ pip install -r requirements.txt
 1. Clona il repository:
 
     ```sh
-    git clone https://github.com/MaxKappa/LLaMa3-Dataset-Preparation-Fine-Tuning
-.git
+    git clone https://github.com/MaxKappa/LLaMa3-Dataset-Preparation-Fine-Tuning.git
     ```
 
 2. Vai nella directory del progetto:

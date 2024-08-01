@@ -36,8 +36,9 @@ def main():
     if args.csv == True:
         converter = csvconverter.CSVConverter(output_dir)
         converter.convert()
-    processor = logprocessor.LogProcessor(output_dir, 12000, args.clean)
+    processor = logprocessor.LogProcessor(output_dir, 12000, args.clean, int(args.percentage))
     processor.process_files()
+    processor.split_jsonl_file()
 
 if __name__ == "__main__":
     main()

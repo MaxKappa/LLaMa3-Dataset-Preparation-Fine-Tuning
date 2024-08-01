@@ -27,8 +27,8 @@ class Mongo:
 
     def process_collections(self):
         collections = self.db.list_collection_names()
-        count = 0
         print("Fetching from db...")
+        count = 0
         for coll in collections:
             if ("FIBRATUS" in coll and not "g_" in coll and not self.clean) or ("FIBRATUS.g_" in coll and self.clean):
                 start = time.time()
@@ -41,7 +41,7 @@ class Mongo:
                 self.retrieve_and_save_data(coll, self.reg_pipeline(), os.path.join(path, 'reg.json'))
                 end = time.time()
                 print(f'Directory {hash_value} saved, count: {count}, duration: {end-start}s')
-                if count == 4:
+                if count == 10:
                     break
 
     def network_pipeline(self):
