@@ -38,3 +38,4 @@ class CSVConverter:
         df.to_csv(csv_path, encoding='utf-8', index=False,  float_format='%.0f')
         print(f"File successfully converted: {csv_path}")
 
+    

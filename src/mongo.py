@@ -6,11 +6,10 @@ from pymongo import MongoClient
 from bson.json_util import dumps
 
 class Mongo:
-    def __init__(self, uri, db_name, output_dir, clean):
+    def __init__(self, uri, db_name, output_dir):
         self.client = MongoClient(uri)
         self.db = self.client[db_name]
         self.output_dir = output_dir
-        self.clean = clean
         self.create_output_dir()
 
     def create_output_dir(self):
@@ -30,7 +29,7 @@ class Mongo:
         print("Fetching from db...")
         count = 0
         for coll in collections:
-            if ("FIBRATUS" in coll and not "g_" in coll and not self.clean) or ("FIBRATUS.g_" in coll and self.clean):
+            if "FIBRATUS" in coll :
                 start = time.time()
                 count += 1
                 hash_value = coll.split('.')[2]
@@ -40,9 +39,7 @@ class Mongo:
                 self.retrieve_and_save_data(coll, self.thread_pipeline(), os.path.join(path, 'thread.json'))
                 self.retrieve_and_save_data(coll, self.reg_pipeline(), os.path.join(path, 'reg.json'))
                 end = time.time()
-                print(f'Directory {hash_value} saved, count: {count}, duration: {end-start}s')
-                if count == 10:
-                    break
+                print(f'Directory {hash_value} saved, count: {count}, duration: {end-start}s')       
 
     def network_pipeline(self):
         return [{'$match': {'name': {'$regex': 'Send|Recv|Connect|Disconnect', '$options': 'i'}, 'kparams.dip': {'$ne': None}}}, {'$project': {'_id': 0, 'pid': '$pid', 'dest': '$kparams.dip', 'prot': '$kparams.l4_proto', 'cmd': '$ps.cmdline', 'op': '$name'}}]

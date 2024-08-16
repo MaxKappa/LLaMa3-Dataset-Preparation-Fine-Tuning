@@ -4,13 +4,12 @@ import pandas as pd
 import json
 
 class LogProcessor:
-    def __init__(self, dir, batch_chars, selector, percentage):
+    def __init__(self, dir, batch_chars, percentage):
         self.dir = dir
         self.training_file_path = os.path.join(self.dir, "training.jsonl")
         self.test_file_path = os.path.join(self.dir, "test.jsonl")
         self.output_file_path = os.path.join(self.dir, "all_data.jsonl")
         self.batch_chars = batch_chars
-        self.selector = selector
         self.percentage = percentage
         self.count = 0
         print('Starting dataset creation...')
@@ -48,29 +47,27 @@ class LogProcessor:
             for file in files:
                 if file.endswith('.json'):
                     file_path = os.path.join(subdir, file)
-                    self.process_file(file_path)
+                    selector = True if 'g_' in subdir else False
+                    self.process_file(file_path, selector)
 
 
-    def process_file(self, file_path):
+    def process_file(self, file_path, selector):
         """Process a single JSON file."""
         log_df = pd.read_json(file_path)
         log_df['pid'] = log_df['pid'].fillna(0).astype(int)
         logs = log_df.apply(lambda row: ', '.join(row.values.astype(str)), axis=1).tolist()
         batches = self.split_logs_to_batches(logs)
-        self.create_jsonl(batches)
+        self.create_jsonl(batches, selector)
         print(f"File successfully processed {file_path}")
 
-    def create_jsonl(self, batches):
+    def create_jsonl(self, batches, selector):
         """Create a JSONL file from batches of logs."""
         jsonl_data = [
-            {
-            "messages": [
-                    {"role": "system", "content": "Determine whether malware activity is detected in this piece of the log. The format is pid, filename, operation. If operation is not present the filename is the thread started. The operation letters are: CreateFile : C, ReadFile: R, DeleteFile: D, WriteFile: W, RegSetValue: SV, RegCreateKey: CK, RegDeleteKey: DK, RegDeleteValue: DV"
-                    },
-                    {"role": "user", "content": "\n".join(batch)},
-                    {"role": "assistant", "content": 'No' if self.selector else 'Yes'}
-                ]
-            }
+                    {
+                        "instruction": "Determine whether malware activity is detected in this piece of the log. The format is pid, filename, operation. If operation is not present the filename is the thread started. The operation letters are: CreateFile : C, ReadFile: R, DeleteFile: D, WriteFile: W, RegSetValue: SV, RegCreateKey: CK, RegDeleteKey: DK, RegDeleteValue: DV. Answer only Yes or No",
+                        "input": "\n".join(batch),
+                        "output": 'No' if selector else 'Yes'
+                    }
             for batch in batches
         ]
         with open(self.output_file_path, 'a') as jsonl_file:
@@ -95,5 +92,6 @@ class LogProcessor:
         with open(self.test_file_path, 'a') as file2:
             json.dump(second_file_batches, file2)
             file2.write('\n')
-        
+
+
 
