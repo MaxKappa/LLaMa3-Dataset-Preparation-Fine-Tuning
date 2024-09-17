@@ -11,7 +11,8 @@ class Filter:
             r'.*Update.*',
             r'.*WindowsStore.*',
             r'.*Xbox.*',
-            r'.*Microsoft.*'
+            r'.*Microsoft.*',
+            r'.*Package_for_RollupFix.*'
         ]
         self.compiled_patterns = [re.compile(pattern) for pattern in self.patterns]
         self.hash = hash
@@ -68,7 +69,9 @@ class Filter:
             'RegSetValue': 'SV',
             'RegCreateKey': 'CK',
             'RegDeleteKey': 'DK',
-            'RegDeleteValue': 'DV'
+            'RegDeleteValue': 'DV',
+            'RegOpenKey': 'OK',
+            'RegCloseKey': 'RC',
         }
 
         if 'op' in document and document['op'] in op_diz:

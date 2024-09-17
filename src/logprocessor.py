@@ -64,7 +64,7 @@ class LogProcessor:
         """Create a JSONL file from batches of logs."""
         jsonl_data = [
                     {
-                        "instruction": "Determine whether malware activity is detected in this piece of the log. The format is pid, filename, operation. If operation is not present the filename is the thread started. The operation letters are: CreateFile : C, ReadFile: R, DeleteFile: D, WriteFile: W, RegSetValue: SV, RegCreateKey: CK, RegDeleteKey: DK, RegDeleteValue: DV. Answer only Yes or No",
+                        "instruction": "Determine whether malware activity is detected in this piece of the log. The format is pid, filename, operation. If operation is not present the filename is the thread started. The operation letters are: CreateFile : C, ReadFile: R, DeleteFile: D, WriteFile: W, RegSetValue: SV, RegCreateKey: CK, RegDeleteKey: DK, RegDeleteValue: DV. Answer only Yes, No or IDK (I don't know)",
                         "input": "\n".join(batch),
                         "output": 'No' if selector else 'Yes'
                     }
